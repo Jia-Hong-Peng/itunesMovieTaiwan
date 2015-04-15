@@ -5,18 +5,6 @@ header('Content-type: text/html; charset=utf-8');
 
 // 目標網址
 ////$target_url[0] = 'https://itunes.apple.com/tw/genre/dian-ying-dong-zuo-yu-li-xian/id4401?l=zh'; //動作與歷險
-
-$abcd = array( 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','*');
-
-for($x=1;$x<=5;$x++)
-{
-	foreach ($abcd as $az)
-	{
-		$target_url[$x]= 'https://itunes.apple.com/tw/genre/dian-ying-dong-zuo-yu-li-xian/id4401?l=zh&letter='.$az.'&page='.$x.'#page';
-		echo $target_url[$x].'<br>';
-	}
-}
-
 ////$target_url[1] = 'https://itunes.apple.com/tw/genre/dian-ying-jing-song-pian/id4416?l=zh'; //驚悚片
 //$target_url[2] = 'https://itunes.apple.com/tw/genre/dian-ying-ke-huan-yu-qi-huan/id4413?l=zh'; //科幻與奇幻片
 //$target_url[3] = 'https://itunes.apple.com/tw/genre/dian-ying-kong-bu-pian/id4408?l=zh'; //恐怖片
@@ -40,7 +28,28 @@ for($x=1;$x<=5;$x++)
 
 ////$target_url[15] = 'https://itunes.apple.com/tw/genre/dian-ying-du-li-zhi-zuo-ying/id4409?l=zh'; //獨立製作影片
 
+
+$zzzzzz = 'https://itunes.apple.com/tw/genre/dian-ying-xi-ju/id4404?l=zh'; //喜劇
+
+
+$abcd = array( 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','*');  //
+
+$intI = 0;
+for($x=1;$x<=5;$x++)
+{
+	foreach ($abcd as $az)
+	{
+		$target_url[$intI]= $zzzzzz.'&letter='.$az.'&page='.$x.'#page';
+		$intI++;
+		//echo $target_url[$x].'<br>';
+	}
+}
+
+
 echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">';
+
+
+
 ob_flush();
 flush();
 foreach ($target_url as $allUrl)
@@ -100,41 +109,57 @@ flush();
 			$sub_html_body = curl_exec($curl2);
 			curl_close($curl2);
 
-
-
-				$dom2 = new DOMDocument();
-				$dom2->loadHTML($sub_html_body);  
-				$xpath2 = new DOMXPath($dom2);
-				$nodelist2 = $xpath2->query("//ul/li/span[@class='price']"); //放入想要抓取的元素
-				//echo $nodelist->length; //抓取資料長度
-				if($nodelist2->length > 0)
-				{			
-						$intMoney = 9999;	
-						$money = str_replace('NT$ ','',$nodelist2->item(0)->nodeValue);
-						$intMoney = (int)$money;
-						//echo ' ';
-						//ob_flush();
-						//flush();
-						
-						if($intMoney <100 &&  $intMoney > 1)
-						{
-							echo '<b><span style="color:#80BFFF">' ;
-						}
-						
-						echo trim($n->nodeValue)." - ";
-							echo $subUrl.' - ' ;
-							echo $money;	
-						
+				//if($sub_html_body->length >0)
+				//{
+					$dom2 = new DOMDocument();
+					$dom2->loadHTML($sub_html_body);  
+					$xpath2 = new DOMXPath($dom2);
+					$nodelist2 = $xpath2->query("//ul/li/span[@class='price']"); //放入想要抓取的元素
+					//echo $nodelist->length; //抓取資料長度
+					if($nodelist2->length > 0)
+					{			
+							$intMoney = 9999;	
+							$money = str_replace('NT$ ','',$nodelist2->item(0)->nodeValue);
+							$intMoney = (int)$money;
+							//echo ' ';
+							//ob_flush();
+							//flush();
 							
-						if($intMoney <100 &&  $intMoney > 1)
-						{
-							echo '</span></b>' ;
-						}
-						
-							echo '<br>';
-							ob_flush();
-							flush();
-				}
+							if($intMoney <100 &&  $intMoney > 1)
+							{
+								echo '<b><span style="color:#80BFFF">' ;
+							}
+							
+							echo trim($n->nodeValue)." - ";
+							
+
+								if($intMoney <100 &&  $intMoney > 1)
+								{
+									echo '<a href="' ;
+								}
+								
+								echo $subUrl;
+								
+								if($intMoney <100 &&  $intMoney > 1)
+								{
+									echo '" target="_blank">'.$subUrl.'</a>' ;
+								}
+								 
+								echo ' - '.$money;	
+							
+								
+							if($intMoney <100 &&  $intMoney > 1)
+							{
+								echo '</span></b>' ;
+							}
+							
+								echo '<br>';
+								ob_flush();
+								flush();
+					}
+				//}
+
+				
 		}
 	echo '=========finish read - '.$allUrl.'=========';	
 	echo '<br>';		
